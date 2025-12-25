@@ -1,0 +1,11 @@
+export { default as Navigation } from "./Navigation";
+export { default as Hero } from "./Hero";
+export { default as ProblemStatement } from "./ProblemStatement";
+export { default as Solution } from "./Solution";
+export { default as Benefits } from "./Benefits";
+export { default as Trust } from "./Trust";
+export { default as SocialProof } from "./SocialProof";
+export { default as HowItWorks } from "./HowItWorks";
+export { default as Pricing } from "./Pricing";
+export { default as Contact } from "./Contact";
+export { default as Footer } from "./Footer";
