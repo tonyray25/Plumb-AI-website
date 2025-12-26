@@ -2,7 +2,12 @@
 
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useEffect, useState } from "react";
+import dynamic from "next/dynamic";
+
+// Dynamically import 3D components to avoid SSR issues
+const Scene3D = dynamic(() => import("./3d/Scene3D"), { ssr: false });
+const Shield3D = dynamic(() => import("./3d/Shield3D"), { ssr: false });
 
 const associations = [
   { name: "Texas Construction Association", abbr: "TCA" },
@@ -16,9 +21,14 @@ const associations = [
 export default function Trust() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
-    <section className="relative py-24 md:py-32 bg-[#0f0f0f]">
+    <section className="relative py-24 md:py-32 bg-[#0f0f0f] overflow-hidden">
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#2a2a2a] to-transparent" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -30,36 +40,56 @@ export default function Trust() {
           className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center"
         >
           {/* Left content */}
-          <div>
-            <p className="text-[#ff6b35] text-sm uppercase tracking-wider mb-4">
-              Built by Construction Professionals
-            </p>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold font-display leading-tight">
-              Built by a Navy veteran who understands operational risk.
-            </h2>
-            <p className="mt-6 text-lg text-[#8a8a8a] leading-relaxed">
-              Our team combines military precision with deep construction industry expertise. We&apos;ve walked job sites, negotiated with GCs, and experienced firsthand the contractual traps that can sink a subcontractor.
-            </p>
-            <p className="mt-4 text-lg text-[#8a8a8a] leading-relaxed">
-              That&apos;s why we built Plumb AI—to give every electrical, plumbing, and HVAC contractor access to the same level of contract intelligence that only the largest firms could previously afford.
-            </p>
+          <div className="relative">
+            {/* 3D Shield - positioned behind text on larger screens */}
+            {mounted && (
+              <div className="hidden md:block absolute -left-20 top-1/2 -translate-y-1/2 w-[300px] h-[350px] opacity-20 -z-0">
+                <Scene3D cameraPosition={[0, 0, 4]}>
+                  <Shield3D scale={0.9} rotationSpeed={0.15} />
+                </Scene3D>
+              </div>
+            )}
 
-            {/* Badges */}
-            <div className="mt-8 flex flex-wrap gap-3">
-              <div className="px-4 py-2 bg-[#1a1a1a] border border-[#2a2a2a] rounded-sm">
-                <span className="text-sm text-[#aaaaaa]">DFW Based</span>
-              </div>
-              <div className="px-4 py-2 bg-[#1a1a1a] border border-[#2a2a2a] rounded-sm">
-                <span className="text-sm text-[#aaaaaa]">Veteran Owned</span>
-              </div>
-              <div className="px-4 py-2 bg-[#1a1a1a] border border-[#2a2a2a] rounded-sm">
-                <span className="text-sm text-[#aaaaaa]">Texas Focused</span>
+            <div className="relative z-10">
+              <p className="text-[#ff6b35] text-sm uppercase tracking-wider mb-4">
+                Built by Construction Professionals
+              </p>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold font-display leading-tight">
+                Built by a Navy veteran who understands operational risk.
+              </h2>
+              <p className="mt-6 text-lg text-[#8a8a8a] leading-relaxed">
+                Our team combines military precision with deep construction industry expertise. We&apos;ve walked job sites, negotiated with GCs, and experienced firsthand the contractual traps that can sink a subcontractor.
+              </p>
+              <p className="mt-4 text-lg text-[#8a8a8a] leading-relaxed">
+                That&apos;s why we built Plumb AI—to give every electrical, plumbing, and HVAC contractor access to the same level of contract intelligence that only the largest firms could previously afford.
+              </p>
+
+              {/* Badges */}
+              <div className="mt-8 flex flex-wrap gap-3">
+                <div className="px-4 py-2 bg-[#1a1a1a] border border-[#2a2a2a] rounded-sm">
+                  <span className="text-sm text-[#aaaaaa]">DFW Based</span>
+                </div>
+                <div className="px-4 py-2 bg-[#1a1a1a] border border-[#2a2a2a] rounded-sm">
+                  <span className="text-sm text-[#aaaaaa]">Veteran Owned</span>
+                </div>
+                <div className="px-4 py-2 bg-[#1a1a1a] border border-[#2a2a2a] rounded-sm">
+                  <span className="text-sm text-[#aaaaaa]">Texas Focused</span>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Right - Association logos */}
-          <div>
+          {/* Right - Association logos with 3D shield accent */}
+          <div className="relative">
+            {/* Mobile 3D Shield */}
+            {mounted && (
+              <div className="md:hidden w-full h-[200px] mb-8 opacity-40">
+                <Scene3D cameraPosition={[0, 0, 4]}>
+                  <Shield3D scale={0.7} rotationSpeed={0.2} />
+                </Scene3D>
+              </div>
+            )}
+
             <p className="text-sm text-[#6a6a6a] uppercase tracking-wider mb-6">
               Trusted by members of
             </p>
@@ -81,6 +111,15 @@ export default function Trust() {
                 </motion.div>
               ))}
             </div>
+
+            {/* 3D Shield accent - desktop only, positioned at bottom right */}
+            {mounted && (
+              <div className="hidden lg:block absolute -bottom-16 -right-16 w-[200px] h-[220px] opacity-30">
+                <Scene3D cameraPosition={[0, 0, 4]}>
+                  <Shield3D scale={0.6} rotationSpeed={0.25} />
+                </Scene3D>
+              </div>
+            )}
           </div>
         </motion.div>
       </div>
