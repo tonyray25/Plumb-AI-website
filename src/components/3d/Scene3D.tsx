@@ -15,7 +15,7 @@ export default function Scene3D({
   cameraPosition = [0, 0, 5],
 }: Scene3DProps) {
   return (
-    <div className={`${className}`}>
+    <div className={`w-full h-full ${className}`}>
       <Canvas
         camera={{ position: cameraPosition, fov: 45 }}
         style={{ background: "transparent" }}
