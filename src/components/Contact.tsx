@@ -2,11 +2,17 @@
 
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
+import dynamic from "next/dynamic";
+
+// Dynamically import 3D components to avoid SSR issues
+const Scene3D = dynamic(() => import("./3d/Scene3D"), { ssr: false });
+const GeometricAccent = dynamic(() => import("./3d/GeometricAccent"), { ssr: false });
 
 export default function Contact() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const [mounted, setMounted] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     company: "",
@@ -18,6 +24,10 @@ export default function Contact() {
     helpType: "",
     message: "",
   });
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
@@ -35,8 +45,27 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="relative py-24 md:py-32 bg-[#0f0f0f]">
+    <section id="contact" className="relative py-24 md:py-32 bg-[#0f0f0f] overflow-hidden">
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#ff6b35]/30 to-transparent" />
+
+      {/* 3D Geometric Accents - Background decorations */}
+      {mounted && (
+        <>
+          {/* Top left accent */}
+          <div className="hidden lg:block absolute top-20 left-[5%] w-[150px] h-[150px] opacity-20">
+            <Scene3D cameraPosition={[0, 0, 3]}>
+              <GeometricAccent scale={0.5} rotationSpeed={0.2} variant="cube" />
+            </Scene3D>
+          </div>
+
+          {/* Bottom right accent */}
+          <div className="hidden lg:block absolute bottom-20 right-[5%] w-[180px] h-[180px] opacity-25">
+            <Scene3D cameraPosition={[0, 0, 3]}>
+              <GeometricAccent scale={0.6} rotationSpeed={0.25} variant="icosahedron" />
+            </Scene3D>
+          </div>
+        </>
+      )}
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
@@ -47,7 +76,7 @@ export default function Contact() {
           className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20"
         >
           {/* Left content */}
-          <div>
+          <div className="relative">
             <p className="text-[#ff6b35] text-sm uppercase tracking-wider mb-4">
               Get Started
             </p>
@@ -89,6 +118,15 @@ export default function Contact() {
                 ))}
               </ul>
             </div>
+
+            {/* 3D Accent near CTA text - mobile visible */}
+            {mounted && (
+              <div className="lg:hidden w-full h-[150px] mt-8 opacity-40">
+                <Scene3D cameraPosition={[0, 0, 3]}>
+                  <GeometricAccent scale={0.5} rotationSpeed={0.3} variant="octahedron" />
+                </Scene3D>
+              </div>
+            )}
 
             {/* Contact info */}
             <div className="mt-10 pt-10 border-t border-[#2a2a2a]">
@@ -140,14 +178,23 @@ export default function Contact() {
             </div>
           </div>
 
-          {/* Right - Form */}
-          <div>
+          {/* Right - Form with 3D accent */}
+          <div className="relative">
+            {/* 3D accent positioned near the form */}
+            {mounted && (
+              <div className="hidden lg:block absolute -top-10 -right-10 w-[120px] h-[120px] opacity-30 z-0">
+                <Scene3D cameraPosition={[0, 0, 3]}>
+                  <GeometricAccent scale={0.4} rotationSpeed={0.35} variant="octahedron" />
+                </Scene3D>
+              </div>
+            )}
+
             <motion.form
               initial={{ opacity: 0, x: 20 }}
               animate={isInView ? { opacity: 1, x: 0 } : {}}
               transition={{ duration: 0.6, delay: 0.2 }}
               onSubmit={handleSubmit}
-              className="p-8 bg-[#1a1a1a] border border-[#2a2a2a] rounded-sm"
+              className="relative z-10 p-8 bg-[#1a1a1a] border border-[#2a2a2a] rounded-sm"
             >
               <h3 className="text-xl font-bold text-white mb-6 font-display">
                 Request Your Free Risk Scan

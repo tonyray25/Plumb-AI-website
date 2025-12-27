@@ -3,6 +3,12 @@
 import { useEffect, useState, useRef } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import dynamic from "next/dynamic";
+
+// Dynamically import 3D components to avoid SSR issues
+const Scene3D = dynamic(() => import("./3d/Scene3D"), { ssr: false });
+const ContractDocument = dynamic(() => import("./3d/ContractDocument"), { ssr: false });
+const GeometricAccent = dynamic(() => import("./3d/GeometricAccent"), { ssr: false });
 
 interface CounterProps {
   end: number;
@@ -69,6 +75,12 @@ function Counter({ end, suffix = "", label, duration = 2000 }: CounterProps) {
 }
 
 export default function Hero() {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   return (
     <section className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
       {/* Background gradient */}
@@ -85,6 +97,24 @@ export default function Hero() {
 
       {/* Accent glow */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-[#ff6b35]/5 rounded-full blur-[120px]" />
+
+      {/* 3D Document - Left side on desktop */}
+      {mounted && (
+        <div className="hidden lg:block absolute left-[5%] top-1/2 -translate-y-1/2 w-[300px] h-[400px] opacity-60">
+          <Scene3D cameraPosition={[0, 0, 4]}>
+            <ContractDocument scale={0.8} rotationSpeed={0.2} />
+          </Scene3D>
+        </div>
+      )}
+
+      {/* 3D Geometric - Right side on desktop */}
+      {mounted && (
+        <div className="hidden lg:block absolute right-[5%] top-1/2 -translate-y-1/2 w-[250px] h-[250px] opacity-50">
+          <Scene3D cameraPosition={[0, 0, 3]}>
+            <GeometricAccent scale={0.7} rotationSpeed={0.3} variant="octahedron" />
+          </Scene3D>
+        </div>
+      )}
 
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32">
         <motion.div
@@ -130,12 +160,12 @@ export default function Hero() {
             Protecting DFW subcontractors by detecting the hidden liabilities buried in specs.
           </motion.p>
 
-          {/* CTA Buttons */}
+          {/* CTA Buttons with 3D accents */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
-            className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4"
+            className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4 relative"
           >
             <Link
               href="#contact"
@@ -167,6 +197,15 @@ export default function Hero() {
           <Counter end={4} suffix="M+" label="Dollars Saved" />
         </motion.div>
       </div>
+
+      {/* Mobile 3D element - smaller, centered below content */}
+      {mounted && (
+        <div className="lg:hidden absolute bottom-24 left-1/2 -translate-x-1/2 w-[120px] h-[120px] opacity-40">
+          <Scene3D cameraPosition={[0, 0, 3]}>
+            <GeometricAccent scale={0.5} rotationSpeed={0.4} variant="icosahedron" />
+          </Scene3D>
+        </div>
+      )}
 
       {/* Scroll indicator */}
       <motion.div
