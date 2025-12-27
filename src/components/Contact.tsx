@@ -7,7 +7,7 @@ import dynamic from "next/dynamic";
 
 // Dynamically import 3D components to avoid SSR issues
 const Scene3D = dynamic(() => import("./3d/Scene3D"), { ssr: false });
-const GeometricAccent = dynamic(() => import("./3d/GeometricAccent"), { ssr: false });
+const IndustrialAC = dynamic(() => import("./3d/models/IndustrialAC"), { ssr: false });
 
 export default function Contact() {
   const ref = useRef(null);
@@ -48,20 +48,20 @@ export default function Contact() {
     <section id="contact" className="relative py-24 md:py-32 bg-[#0f0f0f] overflow-hidden">
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#ff6b35]/30 to-transparent" />
 
-      {/* 3D Geometric Accents - Background decorations */}
+      {/* 3D Industrial AC - Background decorations */}
       {mounted && (
         <>
           {/* Top left accent */}
-          <div className="hidden lg:block absolute top-20 left-[5%] w-[150px] h-[150px] opacity-20">
-            <Scene3D cameraPosition={[0, 0, 3]}>
-              <GeometricAccent scale={0.5} rotationSpeed={0.2} variant="cube" />
+          <div className="hidden lg:block absolute top-16 left-[3%] w-[200px] h-[220px] opacity-25">
+            <Scene3D cameraPosition={[0, 0, 5]}>
+              <IndustrialAC scale={0.8} rotationSpeed={0.15} />
             </Scene3D>
           </div>
 
           {/* Bottom right accent */}
-          <div className="hidden lg:block absolute bottom-20 right-[5%] w-[180px] h-[180px] opacity-25">
-            <Scene3D cameraPosition={[0, 0, 3]}>
-              <GeometricAccent scale={0.6} rotationSpeed={0.25} variant="icosahedron" />
+          <div className="hidden lg:block absolute bottom-16 right-[3%] w-[220px] h-[250px] opacity-30">
+            <Scene3D cameraPosition={[0, 0, 5]}>
+              <IndustrialAC scale={1} rotationSpeed={0.2} />
             </Scene3D>
           </div>
         </>
@@ -119,11 +119,11 @@ export default function Contact() {
               </ul>
             </div>
 
-            {/* 3D Accent near CTA text - mobile visible */}
+            {/* 3D Industrial AC - mobile visible */}
             {mounted && (
-              <div className="lg:hidden w-full h-[150px] mt-8 opacity-40">
-                <Scene3D cameraPosition={[0, 0, 3]}>
-                  <GeometricAccent scale={0.5} rotationSpeed={0.3} variant="octahedron" />
+              <div className="lg:hidden w-full h-[180px] mt-8 opacity-50">
+                <Scene3D cameraPosition={[0, 0, 5]}>
+                  <IndustrialAC scale={0.7} rotationSpeed={0.25} />
                 </Scene3D>
               </div>
             )}
@@ -178,17 +178,8 @@ export default function Contact() {
             </div>
           </div>
 
-          {/* Right - Form with 3D accent */}
+          {/* Right - Form */}
           <div className="relative">
-            {/* 3D accent positioned near the form */}
-            {mounted && (
-              <div className="hidden lg:block absolute -top-10 -right-10 w-[120px] h-[120px] opacity-30 z-0">
-                <Scene3D cameraPosition={[0, 0, 3]}>
-                  <GeometricAccent scale={0.4} rotationSpeed={0.35} variant="octahedron" />
-                </Scene3D>
-              </div>
-            )}
-
             <motion.form
               initial={{ opacity: 0, x: 20 }}
               animate={isInView ? { opacity: 1, x: 0 } : {}}

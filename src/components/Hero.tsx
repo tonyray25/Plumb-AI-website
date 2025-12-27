@@ -7,8 +7,8 @@ import dynamic from "next/dynamic";
 
 // Dynamically import 3D components to avoid SSR issues
 const Scene3D = dynamic(() => import("./3d/Scene3D"), { ssr: false });
-const ContractDocument = dynamic(() => import("./3d/ContractDocument"), { ssr: false });
-const GeometricAccent = dynamic(() => import("./3d/GeometricAccent"), { ssr: false });
+const TowerCrane = dynamic(() => import("./3d/models/TowerCrane"), { ssr: false });
+const Barrel = dynamic(() => import("./3d/models/Barrel"), { ssr: false });
 
 interface CounterProps {
   end: number;
@@ -98,20 +98,20 @@ export default function Hero() {
       {/* Accent glow */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-[#ff6b35]/5 rounded-full blur-[120px]" />
 
-      {/* 3D Document - Left side on desktop */}
+      {/* 3D Tower Crane - Left side on desktop */}
       {mounted && (
-        <div className="hidden lg:block absolute left-[5%] top-1/2 -translate-y-1/2 w-[300px] h-[400px] opacity-60">
-          <Scene3D cameraPosition={[0, 0, 4]}>
-            <ContractDocument scale={0.8} rotationSpeed={0.2} />
+        <div className="hidden lg:block absolute left-[2%] top-1/2 -translate-y-1/2 w-[350px] h-[450px] opacity-70">
+          <Scene3D cameraPosition={[0, 0, 5]}>
+            <TowerCrane scale={1.2} rotationSpeed={0.15} />
           </Scene3D>
         </div>
       )}
 
-      {/* 3D Geometric - Right side on desktop */}
+      {/* 3D Barrel - Right side on desktop */}
       {mounted && (
-        <div className="hidden lg:block absolute right-[5%] top-1/2 -translate-y-1/2 w-[250px] h-[250px] opacity-50">
-          <Scene3D cameraPosition={[0, 0, 3]}>
-            <GeometricAccent scale={0.7} rotationSpeed={0.3} variant="octahedron" />
+        <div className="hidden lg:block absolute right-[5%] top-1/2 -translate-y-1/2 w-[280px] h-[280px] opacity-60">
+          <Scene3D cameraPosition={[0, 0, 4]}>
+            <Barrel scale={1} rotationSpeed={0.25} />
           </Scene3D>
         </div>
       )}
@@ -160,7 +160,7 @@ export default function Hero() {
             Protecting DFW subcontractors by detecting the hidden liabilities buried in specs.
           </motion.p>
 
-          {/* CTA Buttons with 3D accents */}
+          {/* CTA Buttons */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -198,11 +198,11 @@ export default function Hero() {
         </motion.div>
       </div>
 
-      {/* Mobile 3D element - smaller, centered below content */}
+      {/* Mobile 3D element - Barrel */}
       {mounted && (
-        <div className="lg:hidden absolute bottom-24 left-1/2 -translate-x-1/2 w-[120px] h-[120px] opacity-40">
-          <Scene3D cameraPosition={[0, 0, 3]}>
-            <GeometricAccent scale={0.5} rotationSpeed={0.4} variant="icosahedron" />
+        <div className="lg:hidden absolute bottom-28 left-1/2 -translate-x-1/2 w-[140px] h-[140px] opacity-50">
+          <Scene3D cameraPosition={[0, 0, 4]}>
+            <Barrel scale={0.8} rotationSpeed={0.3} />
           </Scene3D>
         </div>
       )}

@@ -7,7 +7,7 @@ import dynamic from "next/dynamic";
 
 // Dynamically import 3D components to avoid SSR issues
 const Scene3D = dynamic(() => import("./3d/Scene3D"), { ssr: false });
-const Shield3D = dynamic(() => import("./3d/Shield3D"), { ssr: false });
+const PressureGauge = dynamic(() => import("./3d/models/PressureGauge"), { ssr: false });
 
 const associations = [
   { name: "Texas Construction Association", abbr: "TCA" },
@@ -41,11 +41,11 @@ export default function Trust() {
         >
           {/* Left content */}
           <div className="relative">
-            {/* 3D Shield - positioned behind text on larger screens */}
+            {/* 3D Pressure Gauge - positioned behind text on larger screens */}
             {mounted && (
-              <div className="hidden md:block absolute -left-20 top-1/2 -translate-y-1/2 w-[300px] h-[350px] opacity-20 -z-0">
+              <div className="hidden md:block absolute -left-16 top-1/2 -translate-y-1/2 w-[280px] h-[320px] opacity-30 -z-0">
                 <Scene3D cameraPosition={[0, 0, 4]}>
-                  <Shield3D scale={0.9} rotationSpeed={0.15} />
+                  <PressureGauge scale={1} rotationSpeed={0.2} />
                 </Scene3D>
               </div>
             )}
@@ -79,13 +79,13 @@ export default function Trust() {
             </div>
           </div>
 
-          {/* Right - Association logos with 3D shield accent */}
+          {/* Right - Association logos with 3D accent */}
           <div className="relative">
-            {/* Mobile 3D Shield */}
+            {/* Mobile 3D Pressure Gauge */}
             {mounted && (
-              <div className="md:hidden w-full h-[200px] mb-8 opacity-40">
+              <div className="md:hidden w-full h-[180px] mb-8 opacity-50">
                 <Scene3D cameraPosition={[0, 0, 4]}>
-                  <Shield3D scale={0.7} rotationSpeed={0.2} />
+                  <PressureGauge scale={0.8} rotationSpeed={0.25} />
                 </Scene3D>
               </div>
             )}
@@ -112,11 +112,11 @@ export default function Trust() {
               ))}
             </div>
 
-            {/* 3D Shield accent - desktop only, positioned at bottom right */}
+            {/* 3D Pressure Gauge accent - desktop only, positioned at bottom right */}
             {mounted && (
-              <div className="hidden lg:block absolute -bottom-16 -right-16 w-[200px] h-[220px] opacity-30">
+              <div className="hidden lg:block absolute -bottom-12 -right-12 w-[180px] h-[200px] opacity-40">
                 <Scene3D cameraPosition={[0, 0, 4]}>
-                  <Shield3D scale={0.6} rotationSpeed={0.25} />
+                  <PressureGauge scale={0.7} rotationSpeed={0.3} />
                 </Scene3D>
               </div>
             )}
